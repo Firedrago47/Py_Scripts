@@ -39,6 +39,21 @@ def validate_subnets_of_parent(parent, subnets):
     return True
 
 
+def validate_overlab(subnets):
+    print("\n Checking for overlapping...\n")
+    for i in range(len(subnets)):
+        for j in range(i + 1, len(subnets)):
+            net1 = subnets[i]
+            net2 = subnets[j]
+
+            if net1.overlaps(net2):
+                print(f"Invalid, detected overlap between {net1} and {net2}")
+                return False
+            else:
+                print(f"No overlaps detected between {net1} and {net2}")
+    return True
+
+
 if __name__ == "__main__":
     path = load_plan("ip_plan.json")
 
@@ -54,6 +69,10 @@ if __name__ == "__main__":
 
     if not validate_subnets_of_parent(parent, subnets):
         print("Invalid,Check the Ip plan")
+        exit(1)
+
+    if not validate_overlab(subnets):
+        print("Invalid, Overlapping detected")
         exit(1)
 
     print("\n All subnets are inside the parent range\n")
